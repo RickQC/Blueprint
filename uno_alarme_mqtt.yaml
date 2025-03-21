@@ -1,0 +1,26 @@
+
+blueprint:
+  name: Alarme UNO - Notification MQTT
+  description: Déclenche des actions sur réception d'un message MQTT du broker HiveCloud sur le topic alarme/uno/notification
+  domain: automation
+  input:
+    action:
+      name: Action à déclencher
+      description: Que faire lorsqu'une alerte est reçue ?
+      selector:
+        action: {}
+trigger:
+  - platform: mqtt
+    topic: "alarme/uno/notification"
+action:
+  - variables:
+      sujet: "{{ trigger.payload_json.subject }}"
+      corps: "{{ trigger.payload_json.body }}"
+      date: "{{ trigger.payload_json.date }}"
+  - service: persistent_notification.create
+    data:
+      title: "🚨 Alerte Alarme UNO"
+      message: "Sujet : {{ sujet }}\nDate : {{ date }}\nContenu : {{ corps }}"
+  - choose: []
+  - default: !input action
+mode: single
