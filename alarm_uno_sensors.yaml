@@ -1,0 +1,15 @@
+template:
+  - sensor:
+      - name: "Alarm UNO Status"
+        state: >
+          {% set s = states('sensor.latest_uno_mqtt_message') %}
+          {% if 'armed' in s.lower() %}armé
+          {% elif 'disarmed' in s.lower() %}désarmé
+          {% elif 'intrusion' in s.lower() %}alerte
+          {% else %}inconnu{% endif %}
+        icon: >
+          {% set s = states('sensor.latest_uno_mqtt_message') %}
+          {% if 'armed' in s.lower() %}mdi:shield-check
+          {% elif 'disarmed' in s.lower() %}mdi:shield-off
+          {% elif 'intrusion' in s.lower() %}mdi:alert-circle
+          {% else %}mdi:help-circle{% endif %}

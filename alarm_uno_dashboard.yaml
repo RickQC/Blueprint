@@ -1,0 +1,22 @@
+views:
+  - title: Centre d'Alerte UNO
+    path: alarm_uno
+    badges:
+      - entity: sensor.alarm_uno_status
+    cards:
+      - type: markdown
+        content: |
+          ## Dernière alerte reçue :
+          **Sujet :** {{ states('sensor.latest_uno_mqtt_message') }}
+
+      - type: history-graph
+        entities:
+          - entity: sensor.alarm_uno_status
+        hours_to_show: 24
+        refresh_interval: 30
+
+      - type: entities
+        title: Actions manuelles
+        entities:
+          - entity: script.acquittement_alerte_uno
+            name: Acquitter l'alerte
